@@ -8,38 +8,31 @@
   const cardBg = scriptTag.getAttribute("data-card-bg") || (theme === "dark" ? "#1f2937" : "#ffffff");
   const cardBorder = scriptTag.getAttribute("data-card-border") || (theme === "dark" ? "#374151" : "#e5e7eb");
   const textColor = scriptTag.getAttribute("data-text-color") || (theme === "dark" ? "#f9fafb" : "#111827");
-  // const metaColor = scriptTag.getAttribute("data-meta-color") || (theme === "dark" ? "#d1d5db" : "#003844");
   const btnBg = scriptTag.getAttribute("data-btn-bg") || "#FB4D3D";
   const btnHoverBg = scriptTag.getAttribute("data-btn-hover-bg") || "#e73b2b";
   const tagBg = scriptTag.getAttribute("data-tag-bg") || (theme === "dark" ? "#374151" : "#f3f4f6");
   const tagColor = scriptTag.getAttribute("data-tag-color") || (theme === "dark" ? "#e5e7eb" : "#003844");
   const btnTextColor = scriptTag.getAttribute("data-btn-text-color") || "#ffffff";
   const btnTextColorhover = scriptTag.getAttribute("data-btn-text-color-hover") || "#ffffff";
-  // const titleColor = scriptTag.getAttribute("data-title-color") || (theme === "dark" ? "#f9fafb" : "#003844");
   const target = document.getElementById("career-widget");
   if (!target) return;
 
   try {
     const res = await fetch(
-      `https://app.taraki.co/api/1.1/obj/job?constraints=[{"key":"Related Company","constraint_type":"equals","value":"${companyId}"},{"key":"Job Status","constraint_type":"equals","value":"Active"}]&include_keys=Location,Created Date`
+      `https://taraki-widget-proxy.areeba-tanveer.workers.dev?constraints=[{"key":"Related Company","constraint_type":"equals","value":"${companyId}"},{"key":"Job Status","constraint_type":"equals","value":"Active"}]&include_keys=Location,Created Date`
     );
     const data = await res.json();
     let jobs = data.response?.results || [];
 
     jobs = jobs.sort((a, b) => {
-        // Parse the "Created Date" string into a Date object
         const dateA = Date.parse(a["Created Date"]);
         const dateB = Date.parse(b["Created Date"]);
-
-        // Check if the date is valid
         if (isNaN(dateA) || isNaN(dateB)) {
             console.error("Invalid date found:", a["Created Date"], b["Created Date"]);
-            return 0;  // Skip sorting if invalid date
+            return 0;
         }
-
-        // Sort by date in descending order (newest first)
-        return dateB - dateA;  // Newest jobs first
-        });
+        return dateB - dateA;
+    });
 
     if (limit > 0) jobs = jobs.slice(0, limit);
 
@@ -70,7 +63,7 @@
         font-weight: 600;
         margin: 0 0 6px;
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color:${textColor};
+        color: ${textColor};
         text-decoration: none !important;
       }
       .taraki-job-meta { font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; color: ${textColor}; padding: 8px 0; }
@@ -80,11 +73,11 @@
       .taraki-apply-btn {
         background-color: ${btnBg};
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color:${btnTextColor};
+        color: ${btnTextColor};
         font-weight: 500;
         border: none;
         border-radius: 8px;
-        padding: 7px 14px; 
+        padding: 7px 14px;
         text-decoration: none !important;
         transition: background-color 0.2s ease, transform 0.1s ease;
       }
@@ -142,7 +135,7 @@
     // Powered by Taraki
     html += `
       <div class="taraki-powered-by">
-        Powered by: 
+        Powered by:
         <a href="https://www.taraki.co/" target="_blank">
           <img src="https://59ec4803f701f00d30844b42b08d0cae.cdn.bubble.io/f1762863411813x966011538071729200/Logo%20%283%29.svg" />
         </a>
