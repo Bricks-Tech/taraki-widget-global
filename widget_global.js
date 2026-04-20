@@ -104,9 +104,20 @@
         const experience = j["Experience Level"] || "";
         const slug = j.Slug || "";
 
+        // let location = "";
+        // if (typeof j.Location === "string") location = j.Location;
+        // else if (typeof j.Location === "object") location = j.Location.display || j.Location.address || j.Location.city || j.Location.name || "";
+        // if (!location && j.City) location = j.City;
+        // if (!location) location = "Location not specified";
+
         let location = "";
-        if (typeof j.Location === "string") location = j.Location;
-        else if (typeof j.Location === "object") location = j.Location.display || j.Location.address || j.Location.city || j.Location.name || "";
+        if (typeof j.Location === "string") {
+          location = j.Location;
+        } else if (typeof j.Location === "object" && j.Location !== null) {
+          const city = j.Location.city || "";
+          const country = j.Location.country || "";
+          location = [city, country].filter(Boolean).join(", ");
+        }
         if (!location && j.City) location = j.City;
         if (!location) location = "Location not specified";
 
