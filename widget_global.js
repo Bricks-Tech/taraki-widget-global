@@ -19,7 +19,7 @@
 
   try {
     const res = await fetch(
-      `https://taraki-widget-proxy.areeba-tanveer.workers.dev?constraints=[{"key":"Related Company","constraint_type":"equals","value":"${companyId}"},{"key":"Job Status","constraint_type":"equals","value":"Active"}]&include_keys=Location,Created Date`
+      `https://taraki-widget-proxy.developer-205.workers.dev/?constraints=[{"key":"Related Company","constraint_type":"equals","value":"${companyId}"},{"key":"Job Status","constraint_type":"equals","value":"Active"}]&include_keys=Location,Created Date`
     );
     const data = await res.json();
     let jobs = data.response?.results || [];
