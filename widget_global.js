@@ -110,16 +110,34 @@
         // if (!location && j.City) location = j.City;
         // if (!location) location = "Location not specified";
 
-        let location = "";
-        if (typeof j.Location === "string") {
-          location = j.Location;
-        } else if (typeof j.Location === "object" && j.Location !== null) {
-          const city = j.Location.city || "";
-          const country = j.Location.country || "";
-          location = [city, country].filter(Boolean).join(", ");
+      let location = "";
+      if (typeof j.Location === "string") {
+        location = j.Location;
+      } else if (typeof j.Location === "object" && j.Location !== null) {
+        location = j.Location.display || j.Location.address || j.Location.city || j.Location.name || "";
+      }
+      if (!location && j.City) location = j.City;
+      
+      // Extract City, Country intelligently
+      if (location) {
+        const parts = location.split(",").map(p => p.trim()).filter(Boolean);
+        
+        if (parts.length >= 2) {
+          // Filter out: postal codes (all digits), plus codes (contain +)
+          const meaningfulParts = parts.filter(p => !/^\d+$/.test(p) && !p.includes("+"));
+          
+          if (meaningfulParts.length >= 2) {
+            // Last = Country, Second last = City
+            const country = meaningfulParts[meaningfulParts.length - 1];
+            const city = meaningfulParts[meaningfulParts.length - 2];
+            location = `${city}, ${country}`;
+          } else if (meaningfulParts.length === 1) {
+            location = meaningfulParts[0];
+          }
         }
-        if (!location && j.City) location = j.City;
-        if (!location) location = "Location not specified";
+      }
+
+if (!location) location = "Location not specified";
 
         const applyLink = `https://app.taraki.co/home/jobs?view=${encodeURIComponent(slug)}`;
 
